@@ -7,7 +7,7 @@ from .base import ScoringFactor
 
 class MisleadingSubdomainFactor(ScoringFactor):
     def __init__(self, filename: str, col: str) -> None:
-        print(f"Filename factor loadded: {filename} {col}")
+        print(f"Misleading subdomain factor loaded: {filename} {col}")
         self.domains = pd.read_csv(filename)[col].tolist()
 
     def score(self, url: str) -> int:

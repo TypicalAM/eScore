@@ -8,6 +8,7 @@ from aggregator import ScoreAggregator, URLException
 from factors.cert import CertFactor
 from factors.mail import MailFactor
 from factors.misleading import MisleadingSubdomainFactor
+from factors.suspicious import SuspiciousNameFactor
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
@@ -43,4 +44,6 @@ if __name__ == "__main__":
     aggregator.add_factor(CertFactor("cert.csv", "AdresDomeny"), -50)
     aggregator.add_factor(MisleadingSubdomainFactor("en.csv", "DomainName"), -50)
     aggregator.add_factor(MisleadingSubdomainFactor("pl.csv", "DomainName"), -50)
+    aggregator.add_factor(SuspiciousNameFactor("en.csv", "DomainName"), -50)
+    aggregator.add_factor(SuspiciousNameFactor("pl.csv", "DomainName"), -50)
     app.run(debug=DEBUG, host=HOST, port=PORT)

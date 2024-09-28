@@ -3,3 +3,4 @@ Flask-Cors==5.0.0
 requests==2.32.3
 black==24.8.0
 isort==5.13.2
+python-Levenshtein==0.26.0
