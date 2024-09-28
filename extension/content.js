@@ -18,8 +18,7 @@ async function fetchFromAPI() {
 		});
 
 		if (!response.ok) {
-			console.log('Failed to fetch rating');
-			return 'Failed to fetch rating';
+			throw new Error('Response not ok');
 		}
 	} catch {
 		console.log('Failed to fetch rating');
@@ -35,8 +34,10 @@ async function fetchFromAPI() {
 }
 
 (async function() {
+	chrome.runtime.sendMessage({ action: 'setBadge', text: `...`, color: '#C6A0F6'});
+
 	let rating = 'No rating available';
 	rating = await fetchFromAPI();
 
-	document.body.innerHTML += '<div id="rating">' + 'Rating: ' + rating.score + '</div>';
+	chrome.runtime.sendMessage({ action: 'setBadge', text: `${rating.score}`, color: '#FF0000'});
 })();
