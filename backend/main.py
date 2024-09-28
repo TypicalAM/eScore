@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+import requests
 from aggregator import ScoreAggregator, URLException
 from factors.cert import CertFactor
 from factors.gtm_checker import GTMChecker
@@ -15,6 +15,7 @@ from factors.social_detector import SocialDetector
 from factors.robots_detector import RobotsDetector
 from factors.suspicious import SuspiciousNameFactor
 from factors.whois_checker import WhoisChecker
+from factors.contacts import ContactsChecker
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
@@ -32,8 +33,11 @@ def home():
         return jsonify({"error": "No URL provided"}), HTTPStatus.BAD_REQUEST
 
     url = data["url"]
+    response = requests.get(url)
+    if response.status_code != 200:
+        return jsonify({"error": "URL is not reachable"}), HTTPStatus.BAD_REQUEST
     try:
-        score = aggregator.check_url(url)
+        score = aggregator.check_url(url, response.text)
     except URLException as exc:
         if DEBUG:
             print(f"URL exception occured: {str(exc)}")
@@ -56,4 +60,5 @@ if __name__ == "__main__":
     aggregator.add_factor(RobotsDetector(DEBUG), 1), 
     aggregator.add_factor(GTMChecker(DEBUG), 1), 
     aggregator.add_factor(WhoisChecker(DEBUG), 1), 
+    aggregator.add_factor(ContactsChecker(DEBUG), 1),
     app.run(debug=DEBUG, host=HOST, port=PORT)

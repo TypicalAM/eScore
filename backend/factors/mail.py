@@ -20,7 +20,7 @@ class MailFactor(ScoringFactor):
             dns_server,
         ]
 
-    def score(self, url: str) -> int:
+    def score(self, url: str, content: str = "") -> int:
         cleaned = urlparse(url).netloc
         mx = []
         txt = []

@@ -8,7 +8,7 @@ class WhoisChecker(ScoringFactor):
     def __init__(self, debug: bool = True):
         self.debug: bool = debug
 
-    def score(self, url: str) -> int:
+    def score(self, url: str, content: str = "") -> int:
         score = 0
         try:
             response = requests.get("https://who-dat.as93.net/" + url.split("//")[1])

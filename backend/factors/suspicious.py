@@ -13,7 +13,7 @@ class SuspiciousNameFactor(ScoringFactor):
         print(f"Suspicious name factor loaded: {filename} {col}")
         self.domains = pd.read_csv(filename)[col].tolist()
 
-    def score(self, url: str) -> int:
+    def score(self, url: str, content: str = "") -> int:
         cleaned = urlparse(url).netloc
         last_name = cleaned.split(".")[-2]  # bogus.exempel.com -> exempel
 

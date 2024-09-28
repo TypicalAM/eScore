@@ -7,12 +7,12 @@ class SocialDetector(ScoringFactor):
     def __init__(self, debug: bool = True):
         self.debug: bool = debug
 
-    def score(self, url: str) -> int:
+    def score(self, url: str, content: str = "") -> int:
         score = 0
         try: 
             socials = ["facebook", "instagram"]
             points_per_social = 100 / len(socials)
-            soup = BeautifulSoup(requests.get(url).text, "html.parser")
+            soup = BeautifulSoup(content, "html.parser")
             links = soup.find_all("a")
             for link in links:
                 if link is None:

@@ -27,12 +27,12 @@ class ScoreAggregator:
             print(f"Adding scoring factor: {factor.__class__.__name__}")
         self.factors.append((factor, weight))
 
-    def check_url(self, url: str) -> int:
+    def check_url(self, url: str, content: str = "") -> int:
         valid, reason = check_url(url)
         if not valid:
             raise URLException(f"Invalid URL: {reason}")
 
         aggregate = 0
         for factor, weight in self.factors:
-            aggregate += weight * factor.score(url)
+            aggregate += weight * factor.score(url, content)
         return aggregate

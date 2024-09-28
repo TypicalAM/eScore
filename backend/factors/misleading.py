@@ -10,7 +10,7 @@ class MisleadingSubdomainFactor(ScoringFactor):
         print(f"Misleading subdomain factor loaded: {filename} {col}")
         self.domains = pd.read_csv(filename)[col].tolist()
 
-    def score(self, url: str) -> int:
+    def score(self, url: str, content: str = "") -> int:
         cleaned = urlparse(url).netloc
         if len(cleaned.split(".")) == 1:
             return 0
