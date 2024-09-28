@@ -1,4 +1,4 @@
-API_URL = 'http://localhost:5000';
+API_URL = 'https://sscore.piaseczny.dev';
 
 async function fetchFromAPI() {
 	const tabURL = window.location.href;
