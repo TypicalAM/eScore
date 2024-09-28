@@ -4,14 +4,14 @@ async function fetchFromAPI() {
 	const tabURL = window.location.href;
 	console.log('fetching rating for: ', tabURL);
 
+	let response; 
 	try {
-		const response = await fetch(`${API_URL}/check_url`, {
+		response = await fetch(`${API_URL}/check_url`, {
 			method: 'POST',
-			mode: 'no-cors',
 			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*'
+				'Content-Type': 'application/json'
 			},
+			//mode: 'no-cors',
 			body: JSON.stringify({
 				url: tabURL
 			})
@@ -38,5 +38,5 @@ async function fetchFromAPI() {
 	let rating = 'No rating available';
 	rating = await fetchFromAPI();
 
-	document.body.innerHTML += '<div id="rating">' + rating + '</div>';
+	document.body.innerHTML += '<div id="rating">' + 'Rating: ' + rating.score + '</div>';
 })();
