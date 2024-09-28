@@ -6,6 +6,9 @@ from flask_cors import CORS
 
 from aggregator import ScoreAggregator, URLException
 from factors.cert import CertFactor
+from factors.gtm_checker import GTMChecker
+from factors.robots_detector import RobotsDetector
+from factors.social_detector import SocialDetector
 from factors.mail import MailFactor
 from factors.misleading import MisleadingSubdomainFactor
 from factors.social_detector import SocialDetector
@@ -48,7 +51,7 @@ if __name__ == "__main__":
     aggregator.add_factor(MisleadingSubdomainFactor("pl.csv", "DomainName"), -50)
     aggregator.add_factor(SuspiciousNameFactor("en.csv", "DomainName"), -50)
     aggregator.add_factor(SuspiciousNameFactor("pl.csv", "DomainName"), -50)
-    aggregator.add_factor(SocialDetector(), 1)
-    aggregator.add_factor(RobotsDetector(), 1)
-
+    aggregator.add_factor(SocialDetector(DEBUG), 1), 
+    aggregator.add_factor(RobotsDetector(DEBUG), 1), 
+    aggregator.add_factor(GTMChecker(DEBUG), 1), 
     app.run(debug=DEBUG, host=HOST, port=PORT)

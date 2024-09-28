@@ -2,8 +2,6 @@ from typing import Sequence, Tuple
 from urllib.parse import urlparse
 
 from factors.base import ScoringFactor
-from factors.robots_detector import RobotsDetector
-from factors.social_detector import SocialDetector
 
 
 class URLException(Exception):
