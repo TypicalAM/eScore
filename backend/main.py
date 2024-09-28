@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 import requests
 from flask import Flask, jsonify, request
+from flask_caching import Cache
 from flask_cors import CORS
 
 from aggregator import ScoreAggregator, URLException
@@ -25,9 +26,12 @@ PORT = os.environ.get("HACKYEAH2024_PORT", 5000)
 aggregator = ScoreAggregator(debug=DEBUG)
 app = Flask(__name__)
 CORS(app)
+app.config["CACHE_TYPE"] = "simple"
+cache = Cache(app)
 
 
 @app.route("/check_url", methods=["POST"])
+@cache.cached(timeout=300)
 def home():
     data = request.get_json()
     if "url" not in data:
