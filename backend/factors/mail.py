@@ -7,8 +7,9 @@ from .base import ScoringFactor
 CLOUDFLARE_DNS = "1.1.1.1"
 SPF_DROP_ALL_RULE = "v=spf1 -all"
 SPF_MARKER = "v=spf1"
-SPF_IP_MARKER = "ipv4="
+SPF_IP_MARKER = "ip4:"
 DMARC_MARKER = "v=DMARC1"
+NO_MX_MARKER = '0 .'
 
 
 class MailFactor(ScoringFactor):
@@ -26,7 +27,7 @@ class MailFactor(ScoringFactor):
         mx = self.resolver.resolve(cleaned, "MX")
         print(f"Sending TXT DNS query for {cleaned} via {self.dns_server}")
         txt = self.resolver.resolve(cleaned, "TXT")
-        if len(mx) == 0:
+        if len(mx) == 0 or NO_MX_MARKER in mx[0].to_text():
             for record in txt:
                 if SPF_DROP_ALL_RULE in record.to_text():
                     print(f"SPF drop all rule discovered in {cleaned}")
@@ -38,7 +39,7 @@ class MailFactor(ScoringFactor):
 
         spf_found = False
         for record in txt:
-            if SPF_MARKER in record.to_text():
+            if SPF_MARKER in record.to_text() and SPF_IP_MARKER in record.to_text():
                 print(f"SPF rule discovered in {cleaned}")
                 spf_found = True
         if not spf_found:
