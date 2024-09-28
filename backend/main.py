@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from aggregator import ScoreAggregator, URLException
+from factors.cert import CertFactor
 from factors.mail import MailFactor
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
@@ -38,4 +39,5 @@ def home():
 
 if __name__ == "__main__":
     aggregator.add_factor(MailFactor(), 1)
+    aggregator.add_factor(CertFactor("cert_domains.csv", "AdresDomeny"), -50)
     app.run(debug=DEBUG, host=HOST, port=PORT)
