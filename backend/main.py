@@ -7,6 +7,7 @@ from flask_caching import Cache
 from flask_cors import CORS
 
 from aggregator import ScoreAggregator, URLException
+from factors.abuse_ip_db import AbuseIpDatabaseFactor
 from factors.cert import CertFactor
 from factors.contacts import ContactsChecker
 from factors.gtm_checker import GTMChecker
@@ -22,6 +23,7 @@ from factors.whois_checker import WhoisChecker
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
 PORT = os.environ.get("HACKYEAH2024_PORT", 5000)
+ABUSE_IP_DB_API_KEY = os.environ["HACKYEAH2024_API_KEY"]
 
 aggregator = ScoreAggregator(debug=DEBUG)
 app = Flask(__name__)
@@ -73,4 +75,5 @@ if __name__ == "__main__":
     aggregator.add_factor(ContactsChecker(DEBUG), 1),
     aggregator.add_factor(TrustpilotFactor(), -1)
     aggregator.add_factor(HSTSFactor(), -1)
+    aggregator.add_factor(AbuseIpDatabaseFactor(ABUSE_IP_DB_API_KEY), 1)
     app.run(debug=DEBUG, host=HOST, port=PORT)
