@@ -39,10 +39,15 @@ def home():
 
     url = data["url"]
     response = requests.get(url)
+    count = len(response.history)
+    count_score = 0
+    if count > 5:
+        count_score = -10
+    last_url = response.url
     if response.status_code != 200:
         return jsonify({"error": "URL is not reachable"}), HTTPStatus.BAD_REQUEST
     try:
-        score = aggregator.check_url(url, response.text)
+        score = aggregator.check_url(last_url, response.text) + count_score
     except URLException as exc:
         if DEBUG:
             print(f"URL exception occured: {str(exc)}")
