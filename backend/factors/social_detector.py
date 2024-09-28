@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+
 from factors.base import ScoringFactor
+
 
 class SocialDetector(ScoringFactor):
 
@@ -9,7 +11,7 @@ class SocialDetector(ScoringFactor):
 
     def score(self, url: str, content: str = "") -> int:
         score = 0
-        try: 
+        try:
             socials = ["facebook", "instagram"]
             points_per_social = 100 / len(socials)
             soup = BeautifulSoup(content, "html.parser")
@@ -18,8 +20,8 @@ class SocialDetector(ScoringFactor):
                 if link is None:
                     continue
                 for social in socials:
-                        score += points_per_social
-                        socials.remove(social)
+                    score += points_per_social
+                    socials.remove(social)
         except Exception as e:
             if self.debug:
                 print(f"Error while checking socials: {str(e)}")

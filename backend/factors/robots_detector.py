@@ -1,5 +1,7 @@
 import requests
+
 from factors.base import ScoringFactor
+
 
 class RobotsDetector(ScoringFactor):
 
@@ -8,11 +10,11 @@ class RobotsDetector(ScoringFactor):
 
     def score(self, url: str, content: str = "") -> int:
         score = 0
-        try: 
+        try:
             response = requests.get(url + "robots.txt")
             if response.status_code == 200:
                 score += 50
-            else: 
+            else:
                 return score
             for line in response.text.split("\n"):
                 if "Sitemap:" in line:

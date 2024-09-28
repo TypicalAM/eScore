@@ -1,5 +1,7 @@
 import requests
+
 from factors.base import ScoringFactor
+
 
 class ContactsChecker(ScoringFactor):
 
@@ -8,7 +10,7 @@ class ContactsChecker(ScoringFactor):
 
     def score(self, url: str, content: str = "") -> int:
         score = 0
-        try: 
+        try:
             socials = ["contact", "kontakt"]
             for social in socials:
                 if social in content.lower():

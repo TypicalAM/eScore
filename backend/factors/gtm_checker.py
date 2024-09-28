@@ -1,4 +1,9 @@
 from factors.base import ScoringFactor
+import bs4 as bs
+import requests
+
+from factors.base import ScoringFactor
+
 
 class GTMChecker(ScoringFactor):
 
