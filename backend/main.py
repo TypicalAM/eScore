@@ -32,8 +32,13 @@ app.config["CACHE_TYPE"] = "simple"
 cache = Cache(app)
 
 
+def make_key():  # POST request caching
+    user_data = request.get_json()
+    return ",".join([f"{key}={value}" for key, value in user_data.items()])
+
+
 @app.route("/check_url", methods=["POST"])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, make_cache_key=make_key)
 def home():
     data = request.get_json()
     if "url" not in data:
