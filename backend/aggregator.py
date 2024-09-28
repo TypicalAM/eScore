@@ -31,7 +31,7 @@ class ScoreAggregator:
 
     def add_factor(self, factor: ScoringFactor, weight: float) -> None:
         if self.debug:
-            print(f"Adding scoring factor: {factor.__name__}")
+            print(f"Adding scoring factor: {factor.__class__.__name__}")
         self.factors.append((factor, weight))
 
     def check_url(self, url: str) -> int:
