@@ -27,5 +27,7 @@ class AbuseIpDatabaseFactor(ScoringFactor):
         for record in a:
             params = {"ipAddress": quote(str(record))}
             resp = requests.get(ABUSE_IP_DB_URL, params=params, headers=self.headers)
-            return int(resp.json()["data"]["abuseConfidenceScore"])
+            abuse_score = resp.json()["data"]["abuseConfidenceScore"]
+            print(f"Abuse IP DB reported an abuse score for {str(record)} as {abuse_score}")
+            return int(abuse_score)
         return 0
