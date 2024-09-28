@@ -1,6 +1,5 @@
 from typing import Sequence, Tuple
-
-import requests
+from urllib.parse import urlparse
 
 from factors.base import ScoringFactor
 
@@ -10,18 +9,12 @@ class URLException(Exception):
 
 
 def check_url(url: str) -> (bool, str):
-    try:
-        if not url.startswith(("http://", "https://")):
-            return False, "not 'http://' or 'https://'"
-
-        response = requests.head(url, timeout=5)
-        if response.status_code >= 200 and response.status_code < 400:
-            return True, f"URL is valid. Status Code: {response.status_code}"
-        else:
-            return False, f"head returned: {response.status_code}"
-
-    except requests.exceptions.RequestException as e:
-        return False, f"requests error: {str(e)}"
+    parsed_url = urlparse(url)
+    if parsed_url.scheme not in ("http", "https"):
+        return False, "URL does not start with 'http://' or 'https://'"
+    if not parsed_url.netloc:
+        return False, "URL is missing a domain"
+    return True, "URL format is valid"
 
 
 class ScoreAggregator:
