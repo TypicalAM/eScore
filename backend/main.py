@@ -7,6 +7,7 @@ from flask_cors import CORS
 from aggregator import ScoreAggregator, URLException
 from factors.cert import CertFactor
 from factors.mail import MailFactor
+from factors.suspicious_name import SuspiciousNameFactor
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
@@ -39,5 +40,7 @@ def home():
 
 if __name__ == "__main__":
     aggregator.add_factor(MailFactor(), -5)
-    aggregator.add_factor(CertFactor("cert_domains.csv", "AdresDomeny"), -50)
+    aggregator.add_factor(CertFactor("cert.csv", "AdresDomeny"), -50)
+    aggregator.add_factor(SuspiciousNameFactor("en.csv", "DomainName"), -50)
+    aggregator.add_factor(SuspiciousNameFactor("pl.csv", "DomainName"), -50)
     app.run(debug=DEBUG, host=HOST, port=PORT)
