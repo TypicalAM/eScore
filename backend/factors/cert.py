@@ -10,5 +10,9 @@ class CertFactor(ScoringFactor):
         self.bad_domains_list = pd.read_csv(filename, delimiter="\t")[col].tolist()
 
     def score(self, url: str, content: str = "") -> int:
-        cleaned = urlparse(url).netloc
-        return cleaned in self.bad_domains_list
+        try: 
+            cleaned = urlparse(url).netloc
+            return cleaned in self.bad_domains_list
+        except Exception as e:
+            print(f"Error while checking certificate: {str(e)}")    
+        return 0

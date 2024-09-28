@@ -14,20 +14,23 @@ class SuspiciousNameFactor(ScoringFactor):
         self.domains = pd.read_csv(filename)[col].tolist()
 
     def score(self, url: str, content: str = "") -> int:
-        cleaned = urlparse(url).netloc
-        last_name = cleaned.split(".")[-2]  # bogus.exempel.com -> exempel
+        try:
+            cleaned = urlparse(url).netloc
+            last_name = cleaned.split(".")[-2]  # bogus.exempel.com -> exempel
 
-        for domain in self.domains:
-            valid_last_name = domain.split(".")[0]
-            levenstein_ratio = ratio(last_name, valid_last_name)
-            similar_length = abs(len(last_name) - len(valid_last_name)) < 2
-            if (
-                similar_length
-                and levenstein_ratio != 1
-                and levenstein_ratio > LEVENSTEIN_THRESHHOLD
-            ):
-                print(
-                    f"Analyzed domain {cleaned} is overly similar to {domain} (ratio: {levenstein_ratio})"
-                )
-                return 1
+            for domain in self.domains:
+                valid_last_name = domain.split(".")[0]
+                levenstein_ratio = ratio(last_name, valid_last_name)
+                similar_length = abs(len(last_name) - len(valid_last_name)) < 2
+                if (
+                    similar_length
+                    and levenstein_ratio != 1
+                    and levenstein_ratio > LEVENSTEIN_THRESHHOLD
+                ):
+                    print(
+                        f"Analyzed domain {cleaned} is overly similar to {domain} (ratio: {levenstein_ratio})"
+                    )
+                    return 1
+        except Exception as e:
+            print(f"Error while checking suspicious name: {str(e)}")
         return 0

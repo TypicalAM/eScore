@@ -11,7 +11,7 @@ class RobotsDetector(ScoringFactor):
     def score(self, url: str, content: str = "") -> int:
         score = 0
         try:
-            response = requests.get(url + "robots.txt")
+            response = requests.get(url + "/robots.txt")
             if response.status_code == 200:
                 score += 50
             else:
