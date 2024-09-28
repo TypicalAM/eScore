@@ -1,12 +1,15 @@
 import os
 from http import HTTPStatus
 
+import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import requests
+
 from aggregator import ScoreAggregator, URLException
 from factors.cert import CertFactor
+from factors.contacts import ContactsChecker
 from factors.gtm_checker import GTMChecker
+from factors.hsts import HSTSFactor
 from factors.mail import MailFactor
 from factors.misleading import MisleadingSubdomainFactor
 from factors.robots_detector import RobotsDetector
@@ -14,7 +17,6 @@ from factors.social_detector import SocialDetector
 from factors.suspicious import SuspiciousNameFactor
 from factors.trustpilot import TrustpilotFactor
 from factors.whois_checker import WhoisChecker
-from factors.contacts import ContactsChecker
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
@@ -61,4 +63,5 @@ if __name__ == "__main__":
     aggregator.add_factor(WhoisChecker(DEBUG), 1),
     aggregator.add_factor(ContactsChecker(DEBUG), 1),
     aggregator.add_factor(TrustpilotFactor(), -1)
+    aggregator.add_factor(HSTSFactor(), -1)
     app.run(debug=DEBUG, host=HOST, port=PORT)

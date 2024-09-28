@@ -1,4 +1,3 @@
-from factors.base import ScoringFactor
 import bs4 as bs
 import requests
 
@@ -12,6 +11,6 @@ class GTMChecker(ScoringFactor):
 
     def score(self, url: str, content: str = "") -> int:
         score = 0
-        if 'googletagmanager.com' in content:
+        if "googletagmanager.com" in content:
             score = 100
         return score
