@@ -9,18 +9,20 @@ from flask_caching import Cache
 from flask_cors import CORS
 
 from aggregator import ScoreAggregator, URLException
-from factors.abuse_ip_db import AbuseIpDatabaseFactor
-from factors.cert import CertFactor
-from factors.contacts import ContactsChecker
-from factors.gtm_checker import GTMChecker
-from factors.hsts import HSTSFactor
-from factors.mail import MailFactor
-from factors.misleading import MisleadingSubdomainFactor
-from factors.robots_detector import RobotsDetector
-from factors.social_detector import SocialDetector
-from factors.suspicious import SuspiciousNameFactor
-from factors.trustpilot import TrustpilotFactor
-from factors.whois_checker import WhoisChecker
+from factors import (
+    AbuseIpDatabaseFactor,
+    CertFactor,
+    ContactsChecker,
+    GTMChecker,
+    HSTSFactor,
+    MailFactor,
+    MisleadingSubdomainFactor,
+    RobotsDetector,
+    SocialDetector,
+    SuspiciousNameFactor,
+    TrustpilotFactor,
+    WhoisChecker,
+)
 
 DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
 HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
@@ -65,7 +67,7 @@ def make_key():  # POST request caching
 
 @app.route("/check_url", methods=["POST"])
 @cache.cached(timeout=300, make_cache_key=make_key)
-def home():
+def check_url():
     data = request.get_json()
     if "url" not in data:
         return jsonify({"error": "No URL provided"}), HTTPStatus.BAD_REQUEST
