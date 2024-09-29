@@ -8,7 +8,7 @@
       API_URL = 'https://sscore.piaseczny.dev';
       
          function checkAddress() {
-              const address = document.getElementById('input').value;
+              let address = document.getElementById('input').value;
               if (!address) {
                 alert('Please enter a valid URL');
                 return;
