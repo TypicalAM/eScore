@@ -1,0 +1,261 @@
+<html>
+  <head>
+    <title>Security Score</title>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+   <script>
+      API_URL = 'https://sscore.piaseczny.dev';
+      
+         function checkAddress() {
+              const address = document.getElementById('input').value;
+              if (!address.match(/^(http|https):\/\/[^ "]+$/)) {
+                alert('Please enter a valid URL');
+                return;
+              }
+              document.getElementById('box').innerHTML = '<div class="dot-flashing"></div>';
+              fetch('https://sscore.piaseczny.dev/check_url', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  url: address
+                })
+              }).then(response => response.json())
+                .then(data => {
+                  console.log(data);
+                  document.getElementById('box').innerHTML = '<div>';
+                  document.getElementById('box').innerHTML += '<img src="frame.svg">';
+                  document.getElementById('box').innerHTML += '<div class="minus">';
+                  document.getElementById('box').innerHTML += '<h1 id="mainFactor">'
+                  document.getElementById('box').innerHTML += '<h1>'
+                  document.getElementById('box').innerHTML += '<h2>Security Score</h2>'
+                  document.getElementById('box').innerHTML += '</div>'
+                  document.getElementById('box').innerHTML += '</div>'
+
+                  document.getElementById('box').innerHTML += '<div class="ul">'
+                  document.getElementById('box').innerHTML += '<li>Tech standards: <div class="bold" id="tech"></div></li>'
+                  document.getElementById('box').innerHTML += '<li class="description" id="tech_description"></li>'
+                  document.getElementById('box').innerHTML += '<li>Reviews: <div class="bold" id="review"></div></li>'
+                  document.getElementById('box').innerHTML += '<li class="description" id="review_description"></li>'
+                  document.getElementById('box').innerHTML += '<li>Phising: <div class="bold" id="phising"></div></li>'
+                  document.getElementById('box').innerHTML += '<li class="description" id="phising_description"></li>'
+                  document.getElementById('box').innerHTML += '<li>Social: <div class="bold" id="social"></div></li>'
+                  document.getElementById('box').innerHTML += '<li class="description" id="social_description"></li>'
+                  document.getElementById('box').innerHTML += '</div>'
+                  document.getElementById('mainFactor').innerHTML = data.total_score + '%';
+                  if (data.total_score > 70 ) {
+                    document.getElementById('mainFactor').style.color = '#A1C84E';
+                  } else if (data.total_score > 40){
+                    document.getElementById('mainFactor').style.color = '#F5EA30';
+                  } else if (data.total_score > 25){
+                    document.getElementById('mainFactor').style.color = '#F4A449';
+                  } else {
+                    document.getElementById('mainFactor').style.color = '#EB4F50';
+                  }
+                  document.getElementById('tech').innerHTML = data.aggregators.tech_standards.score + '%';
+                  document.getElementById('tech_description').innerHTML = data.aggregators.tech_standards.notes.join('</br>');
+                  document.getElementById('review').innerHTML = data.aggregators.reviews.score + '%';
+                  document.getElementById('review_description').innerHTML = data.aggregators.reviews.notes.join('</br>');
+                  document.getElementById('phising').innerHTML = data.aggregators.phishing.score + '%';
+                  document.getElementById('phising_description').innerHTML = data.aggregators.phishing.notes.join('</br>');
+                  document.getElementById('social').innerHTML = data.aggregators.social.score + '%';
+                  document.getElementById('social_description').innerHTML = data.aggregators.social.notes.join('</br>');
+                }).catch(err => {
+                    alert('Something went wrong, please try again later');
+                  console.error(err);
+                });
+         }
+      
+        
+   </script>
+   <style>
+      @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+      body {
+      background-color: #fffbf0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Oxanium', sans-serif;
+      margin: 0;
+      padding: 0;
+      margin-top: 50px; 
+      width: 100vw;
+      }
+
+      img {
+        width: 400px;
+      }
+   
+      @media (max-width: 600px) {
+        img {
+          width: 200px;
+        }
+        #input {
+          width: 250!important;
+        }
+        #check {
+          width: 100px;
+        }
+        .minus {
+          margin-top: -50px !important;
+        }
+      }
+
+      #foo {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      }
+      .dot-flashing {
+      position: relative;
+      margin: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #9880ff;
+      color: #9880ff;
+      animation: dot-flashing 1s infinite linear alternate;
+      animation-delay: 0.5s;
+      }
+      .dot-flashing::before, .dot-flashing::after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      }
+      .dot-flashing::before {
+      left: -15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #9880ff;
+      color: #9880ff;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 0s;
+      }
+      .dot-flashing::after {
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #9880ff;
+      color: #9880ff;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 1s;
+      }
+      @keyframes dot-flashing {
+      0% {
+      background-color: #9880ff;
+      }
+      50%, 100% {
+      background-color: rgba(152, 128, 255, 0.2);
+      }
+      }
+      ul {
+      font-weight: 400;
+      font-size: 28px;
+      width: 100%;
+      margin-top: 40px;
+      margin-bottom: 0px;
+      }
+      li {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      }
+      .description {
+      font-size: 16px;
+      font-weight: 200;
+      padding-bottom: 20px;
+      }
+      .bold {
+      font-weight: 600;
+      }
+      #input {
+      width: 400px;
+      height: 40px;
+      border-radius: 100px;
+      border: 1px solid #000000;
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+      }
+
+      #input:focus {
+      box-shadow: 0px 0px 2px 2px rgba(191, 114, 255, 1);
+      }
+      #mainFactor {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .ul {
+      padding-top: 40px;
+      padding-left: 0;
+      }
+      h2 {
+      font-weight: 400;
+      font-size: 20px;
+      margin: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      }
+      h1 {
+      margin: 0px;
+      }
+      .minus {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: -70px;
+      } 
+      #check {
+      all: unset;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-radius: 100px;
+      font-size: 16px;
+      color: #fff;
+      margin-left: 10px;
+      background-color: #f4a449;
+      }
+
+      #check:hover {
+      background-color: #db9240;
+      color: #eee;
+      cursor: pointer;
+      }
+
+      #box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      }
+
+      li {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      }
+
+   </style>
+   <body>
+      <div id="box">
+         <img src="logo.svg">
+      </div>
+      <div >
+         <input type="text" id="input" placeholder="Address to check">
+         <button id="check" onclick="checkAddress()">Check</button>
+      </div>
+   </body>
+</html>
