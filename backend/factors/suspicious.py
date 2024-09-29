@@ -5,7 +5,7 @@ from Levenshtein import ratio
 
 from .base import ScoringFactor
 
-LEVENSTEIN_THRESHHOLD = 0.75
+LEVENSTEIN_THRESHHOLD = 0.85
 
 
 class SuspiciousNameFactor(ScoringFactor):
