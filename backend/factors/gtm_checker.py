@@ -7,6 +7,6 @@ class GTMChecker(ScoringFactor):
         self.debug: bool = debug
 
     def score(self, url: str, content: str = "") -> list[int, list[str]]:
-        if "googletagmanager.com" in content:
-            return 100, []
-        return 0, ["Google Tag Manager missing"]
+        if "googletagmanager.com" not in content:
+            return 1, ["Google Tag Manager missing"]
+        return 0, []

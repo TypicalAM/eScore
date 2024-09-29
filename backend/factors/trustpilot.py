@@ -26,9 +26,9 @@ class TrustpilotFactor(ScoringFactor):
                 print(f"TrustScore found: {trust_score} out of 5")
             else:
                 print("TrustScore no match, this site should exist")
-                return 0, ["No TrustScore rating"]
+                return 200, ["No TrustScore rating"]
             trust_score = trust_score[1] + trust_score[2]  # 4.5 -> 45
-            return int(trust_score), []
+            return 50 - int(trust_score), []
         except Exception as e:
             print(f"Error while checking trustpilot: {str(e)}")
-            return 0, ["Failed to get TrustScore records"]
+            return 200, ["Failed to get TrustScore records"]

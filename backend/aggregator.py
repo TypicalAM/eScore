@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 
 from factors.base import ScoringFactor
 
+BASE_SCORE = 100
+
 
 class URLException(Exception):
     pass
@@ -58,4 +60,4 @@ class ScoreAggregator:
         q = queue.get()
         aggregate = sum([x[0] for x in q.values()])
         aggregate_notes = [item for row in [x[1] for x in q.values()] for item in row]
-        return aggregate, aggregate_notes
+        return aggregate + BASE_SCORE, aggregate_notes

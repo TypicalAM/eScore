@@ -108,22 +108,32 @@ def check_url():
 
 
 if __name__ == "__main__":
-    tech_standards.add_factor(MailFactor(), -5)
-    tech_standards.add_factor(HSTSFactor(), -1)
-    tech_standards.add_factor(GTMChecker(DEBUG), 1)
-    tech_standards.add_factor(WhoisChecker(DEBUG), 1)
-    tech_standards.add_factor(RobotsDetector(DEBUG), 1)
+    tech_standards.add_factor(MailFactor(), -5)  # 0 (good) or 1
+    tech_standards.add_factor(HSTSFactor(), -5)  # 0 (good) or 1
+    tech_standards.add_factor(GTMChecker(DEBUG), -5)  # 0 (good) or 1
+    tech_standards.add_factor(WhoisChecker(DEBUG), -5)  # 0 (good) or 1
+    tech_standards.add_factor(RobotsDetector(DEBUG), -5)  # 0 (good) or 1
 
-    social.add_factor(CertFactor("cert.csv", "AdresDomeny"), -50)
-    social.add_factor(AbuseIpDatabaseFactor(ABUSE_IP_DB_API_KEY), 1)
+    social.add_factor(CertFactor("cert.csv", "AdresDomeny"), -50)  # 0 (good) or 1
+    social.add_factor(
+        AbuseIpDatabaseFactor(ABUSE_IP_DB_API_KEY), -0.5
+    )  # 0 (good) to 100
 
-    phishing.add_factor(MisleadingSubdomainFactor("pl.csv", "DomainName"), -50)
-    phishing.add_factor(MisleadingSubdomainFactor("en.csv", "DomainName"), -50)
-    phishing.add_factor(SuspiciousNameFactor("pl.csv", "DomainName"), -50)
-    phishing.add_factor(SuspiciousNameFactor("en.csv", "DomainName"), -50)
+    phishing.add_factor(
+        MisleadingSubdomainFactor("pl.csv", "DomainName"), -1.5
+    )  # 0 (good) or 1
+    phishing.add_factor(
+        MisleadingSubdomainFactor("en.csv", "DomainName"), -1.5
+    )  # 0 (good) or 1
+    phishing.add_factor(
+        SuspiciousNameFactor("pl.csv", "DomainName"), -1.5
+    )  # 0 (good) or 1
+    phishing.add_factor(
+        SuspiciousNameFactor("en.csv", "DomainName"), -1.5
+    )  # 0 (good) or 1
 
-    social.add_factor(SocialDetector(DEBUG), 1)
-    social.add_factor(ContactsChecker(DEBUG), 1)
+    social.add_factor(SocialDetector(DEBUG), -4)  # 0 (good) or 1
+    social.add_factor(ContactsChecker(DEBUG), -4)  # 0 (good) or 1
 
-    reviews.add_factor(TrustpilotFactor(), -1)
+    reviews.add_factor(TrustpilotFactor(), -0.25)  # 0 (good) to 50
     app.run(debug=DEBUG, host=HOST, port=PORT)

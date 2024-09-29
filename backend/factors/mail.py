@@ -24,7 +24,6 @@ class MailFactor(ScoringFactor):
         cleaned = urlparse(url).netloc
         mx = []
         txt = []
-        notes = []
         try:
             print(f"Sending MX DNS query for {cleaned} via {self.dns_server}")
             mx = self.resolver.resolve(cleaned, "MX")
@@ -32,7 +31,7 @@ class MailFactor(ScoringFactor):
             txt = self.resolver.resolve(cleaned, "TXT")
         except Exception as exc:
             print(f"Exception while sending DNS queries: {str(exc)}")
-            return 1, []
+            return 1, ["Unable to fetch MX/TXT queries"]
         if len(mx) == 0 or NO_MX_MARKER in mx[0].to_text():
             for record in txt:
                 if SPF_DROP_ALL_RULE in record.to_text():

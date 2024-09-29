@@ -13,18 +13,20 @@ class RobotsDetector(ScoringFactor):
         try:
             response = requests.get(url + "/robots.txt")
             if response.status_code == 200:
-                score += 50
+                score = 0
             else:
-                return 0, ["Site doesn't contain robots.txt"]
+                return 1, ["Site doesn't contain robots.txt"]
             for line in response.text.split("\n"):
                 if "Sitemap:" in line:
                     site_map_url = line.split(" ")[1]
                     if requests.get(site_map_url).status_code == 200:
-                        score += 50
+                        score = 0
+                    else:
+                        score = 1
         except Exception as e:
             if self.debug:
                 print(f"Error while checking robots.txt: {str(e)}")
-            return 0, ["Failed to get robots.txt"]
-        if score == 50:
-            return 50, ["Site has a valid robots.txt, but no sitemap"]
+            return 1, ["Failed to get robots.txt"]
+        if score == 1:
+            return 1, ["Site has a valid robots.txt, but sitemap is nonexistent"]
         return score, []

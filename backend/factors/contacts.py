@@ -11,9 +11,9 @@ class ContactsChecker(ScoringFactor):
             socials = ["contact", "kontakt"]
             for social in socials:
                 if social in content.lower():
-                    return 100, []
+                    return 0, []
         except Exception as e:
             if self.debug:
                 print(f"Error while checking socials: {str(e)}")
-            return 0, ["Failed to get contact info status"]
-        return 0, ["No contact info"]
+            return 1, ["Failed to get contact info status"]
+        return 1, ["No contact info"]
