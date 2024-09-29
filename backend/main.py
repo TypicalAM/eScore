@@ -108,16 +108,18 @@ def check_url():
 
 
 if __name__ == "__main__":
-    tech_standards.add_factor(MailFactor(), -5)  # 0 (good) or 1
-    tech_standards.add_factor(HSTSFactor(), -5)  # 0 (good) or 1
-    tech_standards.add_factor(GTMChecker(DEBUG), -5)  # 0 (good) or 1
-    tech_standards.add_factor(WhoisChecker(DEBUG), -5)  # 0 (good) or 1
-    tech_standards.add_factor(RobotsDetector(DEBUG), -5)  # 0 (good) or 1
+    tech_standards.add_factor(MailFactor(), -10)  # 0 (good) or 1
+    tech_standards.add_factor(HSTSFactor(), -10)  # 0 (good) or 1
+    tech_standards.add_factor(GTMChecker(DEBUG), -10)  # 0 (good) or 1
+    tech_standards.add_factor(WhoisChecker(DEBUG), -10)  # 0 (good) or 1
+    tech_standards.add_factor(RobotsDetector(DEBUG), -10)  # 0 (good) or 1
 
     social.add_factor(CertFactor("cert.csv", "AdresDomeny"), -50)  # 0 (good) or 1
     social.add_factor(
         AbuseIpDatabaseFactor(ABUSE_IP_DB_API_KEY), -0.5
     )  # 0 (good) to 100
+    social.add_factor(SocialDetector(DEBUG), -30)  # 0 (good) or 1
+    social.add_factor(ContactsChecker(DEBUG), -30)  # 0 (good) or 1
 
     phishing.add_factor(
         MisleadingSubdomainFactor("pl.csv", "DomainName"), -1.5
@@ -132,8 +134,5 @@ if __name__ == "__main__":
         SuspiciousNameFactor("en.csv", "DomainName"), -1.5
     )  # 0 (good) or 1
 
-    social.add_factor(SocialDetector(DEBUG), -4)  # 0 (good) or 1
-    social.add_factor(ContactsChecker(DEBUG), -4)  # 0 (good) or 1
-
-    reviews.add_factor(TrustpilotFactor(), -0.25)  # 0 (good) to 50
+    reviews.add_factor(TrustpilotFactor(), -1)  # 0 (good) to 50
     app.run(debug=DEBUG, host=HOST, port=PORT)
