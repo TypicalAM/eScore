@@ -1,7 +1,6 @@
 <html>
-  <head>
-    <script src="ui.js"></script>
-  </head>
+  <script src="ui.js"></script>
+  <script type="module" src="node_modules/spin.js/spin.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
     body {
@@ -10,14 +9,131 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      height: 350px;
+      height: 400px;
       width: 350px;
       font-family: 'Oxanium', sans-serif;
       border-radius: 20px;
+      margin-top: 50px;
+    }
+    #foo {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+    }
+    .dot-flashing {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #00000;
+      color: #00000;
+      animation: dot-flashing 1s infinite linear alternate;
+      animation-delay: 0.5s;
+    }
+    .dot-flashing::before, .dot-flashing::after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0;
+    }
+    .dot-flashing::before {
+      left: -15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #00000;
+      color: #00000;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 0s;
+    }
+    .dot-flashing::after {
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #00000;
+      color: #00000;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 1s;
+    }
+    
+    @keyframes dot-flashing {
+      0% {
+        background-color: #00000;
+      }
+      50%, 100% {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+    ul {
+      font-weight: 400;
+      font-size: 20px;
+      width: 100%;
+      margin-top: 40px;
+      margin-bottom: 0px;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+    .description {
+      font-size: 12px;
+      font-weight: 200;
+    }
+    .bold {
+      font-weight: 600;
+    }
+    #input {
+      width: 100%;
+      height: 50px;
+      border-radius: 10px;
+      border: 1px solid #00000;
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    ul {
+      padding-left: 0;
+    }
+    h2 {
+      font-weight: 400;
+      font-size: 20px;
+      margin: 0px;
+    }
+
+    h1 {
+      margin: 0px;
+    }
+
+    .minus {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: -70px;
     }
   </style>
   <body>
-    <img src="logo.svg">
-    <h1 id="mainFactor">Wait...</h1>
+    <img src="frame.svg">
+    <div class="minus">
+    <h1 id="mainFactor" style="color='#ff0000'">
+      34%
+      <h1>
+      <h2>Security Score</h2>
+
+      </div>
+      <ul>
+        <li>Tech standards: <div class="bold">43%</div></li>
+        <li class="description">Tech standards: </li>
+        <li>Reviews: <div class="bold">100%</div></li>
+        <li class="description">Tech standards: </li>
+        <li>Phising: <div class="bold">100%</div></li>
+        <li class="description">Tech standards: </li>
+        <li>Social: <div class="bold">100%</div></li>
+        <li class="description"> Tech standards:</li>
+      </ul>
+      <input type="text" id="input" placeholder="Address to check">
   </body>
 </html>
