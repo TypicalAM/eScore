@@ -36,8 +36,12 @@ async function fetchFromAPI() {
 (async function() {
 	chrome.runtime.sendMessage({ action: 'setBadge', text: `...`, color: '#C6A0F6'});
 
+	chrome.runtime.sendMessage({ action: 'updateStatus', text: `...`, color: '#C6A0F6'});
+
 	let rating = 'No rating available';
 	rating = await fetchFromAPI();
 
-	chrome.runtime.sendMessage({ action: 'setBadge', text: `${rating.score}`, color: '#FF0000'});
+	chrome.runtime.sendMessage({ action: 'updateStatus', text: `${rating.total_score}`, color: '#C6A0F6'});
+
+	chrome.runtime.sendMessage({ action: 'setBadge', text: `${rating.total_score}`, color: '#FF0000'});
 })();

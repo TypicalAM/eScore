@@ -9,7 +9,10 @@
 	},
 	"permissions": [
 		"tabs",
-		"activeTab"
+		"activeTab",
+		"scripting",
+		"storage",
+		"nativeMessaging"
 	],
 	"content_scripts": [
 		{
