@@ -9,18 +9,14 @@ class SocialDetector(ScoringFactor):
         self.debug: bool = debug
 
     def score(self, url: str, content: str = "") -> list[int, list[str]]:
+        print("SocialDetector")
         score = 1
         try:
             socials = ["facebook", "instagram"]
-            soup = BeautifulSoup(content, "html.parser")
-            links = soup.find_all("a")
-            for link in links:
-                if link is None:
-                    continue
-                for social in socials:
-                    if social in link:
-                        score -= 0.5
-                        socials.remove(social)
+            content = content.lower()
+            for social in socials:
+                if social in content:
+                    score -= 0.5
         except Exception as e:
             if self.debug:
                 print(f"Error while checking socials: {str(e)}")
