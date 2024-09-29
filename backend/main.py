@@ -46,6 +46,7 @@ class AggregatorScore:
 class Scores:
     aggregators: dict[str, AggregatorScore]
     total_score: float
+    real_site: str
 
     def to_json(self) -> str:
         return json.dumps(asdict(self))
@@ -100,7 +101,7 @@ def home():
 
     scores_values = [x.score for x in scores.values()]
     total_score = sum(scores_values) / len(scores_values)
-    final = Scores(scores, total_score)
+    final = Scores(scores, total_score, last_url)
     return jsonify(final), HTTPStatus.OK
 
 
