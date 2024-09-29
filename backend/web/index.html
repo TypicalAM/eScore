@@ -13,6 +13,9 @@
                 alert('Please enter a valid URL');
                 return;
               }
+              if (!address.startsWith('http')) {
+                address = 'https://' + address;
+              }
               document.getElementById('box').innerHTML = '<div class="dot-flashing"></div>';
               fetch('https://sscore.piaseczny.dev/check_url', {
                 method: 'POST',
