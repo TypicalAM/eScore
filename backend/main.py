@@ -101,8 +101,7 @@ def home():
     scores_values = [x.score for x in scores.values()]
     total_score = sum(scores_values) / len(scores_values)
     final = Scores(scores, total_score)
-    print(final)
-    return jsonify(scores), HTTPStatus.OK
+    return jsonify(final), HTTPStatus.OK
 
 
 if __name__ == "__main__":
