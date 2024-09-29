@@ -21,51 +21,53 @@
       height: 100px;
       transform: translate(-50%, -50%);
     }
-    .dot-flashing {
-      position: relative;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
-      background-color: #00000;
-      color: #00000;
-      animation: dot-flashing 1s infinite linear alternate;
-      animation-delay: 0.5s;
-    }
-    .dot-flashing::before, .dot-flashing::after {
-      content: "";
-      display: inline-block;
-      position: absolute;
-      top: 0;
-    }
-    .dot-flashing::before {
-      left: -15px;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
-      background-color: #00000;
-      color: #00000;
-      animation: dot-flashing 1s infinite alternate;
-      animation-delay: 0s;
-    }
-    .dot-flashing::after {
-      left: 15px;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
-      background-color: #00000;
-      color: #00000;
-      animation: dot-flashing 1s infinite alternate;
-      animation-delay: 1s;
-    }
-    
-    @keyframes dot-flashing {
-      0% {
-        background-color: #00000;
-      }
-      50%, 100% {
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-    }
+
+  .dot-flashing {
+  position: relative;
+  margin: 20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.dot-flashing::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dot-flashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+.dot-flashing::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dot-flashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+  0% {
+    background-color: #9880ff;
+  }
+  50%, 100% {
+    background-color: rgba(152, 128, 255, 0.2);
+  }
+}
     ul {
       font-weight: 400;
       font-size: 20px;
@@ -119,20 +121,20 @@
     <img src="frame.svg">
     <div class="minus">
     <h1 id="mainFactor" style="color='#ff0000'">
-      34%
+            <div class="dot-flashing"></div>
       <h1>
       <h2>Security Score</h2>
 
       </div>
       <ul>
-        <li>Tech standards: <div class="bold">43%</div></li>
-        <li class="description">Tech standards: </li>
-        <li>Reviews: <div class="bold">100%</div></li>
-        <li class="description">Tech standards: </li>
-        <li>Phising: <div class="bold">100%</div></li>
-        <li class="description">Tech standards: </li>
-        <li>Social: <div class="bold">100%</div></li>
-        <li class="description"> Tech standards:</li>
+        <li>Tech standards: <div class="bold" id="tech"></div></li>
+        <li class="description" id="tech_description"></li>
+        <li>Reviews: <div class="bold" id="review"></div></li>
+        <li class="description" id="review_description"></li>
+        <li>Phising: <div class="bold" id="phising"></div></li>
+        <li class="description" id="phising_description"></li>
+        <li>Social: <div class="bold" id="social"></div></li>
+        <li class="description" id="social_description"></li>
       </ul>
       <input type="text" id="input" placeholder="Address to check">
   </body>
