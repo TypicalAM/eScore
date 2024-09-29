@@ -82,10 +82,10 @@ def home():
     scores = {}
     try:
         for name, aggregator in [
-            ("tech_standards", tech_standards),
             ("reviews", reviews),
             ("phishing", phishing),
             ("social", social),
+            ("tech_standards", tech_standards),
         ]:
             score, notes = aggregator.check_url(last_url, response.text)
             scores[name] = AggregatorScore(score, notes)

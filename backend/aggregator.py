@@ -1,3 +1,5 @@
+import multiprocessing
+from os import getpid
 from typing import Sequence, Tuple
 from urllib.parse import urlparse
 
@@ -17,6 +19,16 @@ def check_url(url: str) -> (bool, str):
     return True, "URL format is valid"
 
 
+def worker(queue, factor, url, content, weight):
+    try:
+        score, notes = factor.score(url, content)
+    except Exception as exc:
+        print(getpid(), exc)
+    ret = queue.get()
+    ret[getpid()] = [score * weight, notes]
+    queue.put(ret)
+
+
 class ScoreAggregator:
     def __init__(self, debug: bool = True):
         self.debug: bool = debug
@@ -32,11 +44,18 @@ class ScoreAggregator:
         if not valid:
             raise URLException(f"Invalid URL: {reason}")
 
-        aggregate = 0
-        aggregate_notes = []
-        for factor, weight in self.factors:
-            score, notes = factor.score(url, content)
-            if len(notes) != 0:
-                aggregate_notes += notes
-            aggregate += weight * score
+        ret = {}
+        queue = multiprocessing.Queue()
+        queue.put(ret)
+        processes = [
+            multiprocessing.Process(
+                target=worker, args=(queue, factor, url, content, weight)
+            )
+            for factor, weight in self.factors
+        ]
+        [p.start() for p in processes]
+        [p.join() for p in processes]
+        q = queue.get()
+        aggregate = sum([x[0] for x in q.values()])
+        aggregate_notes = [item for row in [x[1] for x in q.values()] for item in row]
         return aggregate, aggregate_notes
