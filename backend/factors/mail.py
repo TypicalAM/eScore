@@ -20,10 +20,11 @@ class MailFactor(ScoringFactor):
             dns_server,
         ]
 
-    def score(self, url: str, content: str = "") -> int:
+    def score(self, url: str, content: str = "") -> list[int, list[str]]:
         cleaned = urlparse(url).netloc
         mx = []
         txt = []
+        notes = []
         try:
             print(f"Sending MX DNS query for {cleaned} via {self.dns_server}")
             mx = self.resolver.resolve(cleaned, "MX")
@@ -31,16 +32,16 @@ class MailFactor(ScoringFactor):
             txt = self.resolver.resolve(cleaned, "TXT")
         except Exception as exc:
             print(f"Exception while sending DNS queries: {str(exc)}")
-            return 1
+            return 1, []
         if len(mx) == 0 or NO_MX_MARKER in mx[0].to_text():
             for record in txt:
                 if SPF_DROP_ALL_RULE in record.to_text():
                     print(f"SPF drop all rule discovered in {cleaned}")
-                    return 0
+                    return 0, []
             print(f"SPF drop all rule missing in {cleaned}")
             return (
                 1  # If we don't have an MX records we should have an SPF hard drop rule
-            )
+            ), ["SPF drop all rule missing"]
 
         spf_found = False
         for record in txt:
@@ -49,7 +50,7 @@ class MailFactor(ScoringFactor):
                 spf_found = True
         if not spf_found:
             print(f"SPF ipv4 rule missing in {cleaned}")
-            return 1
+            return 1, ["SPF sender ip rule missing"]
 
         dmarc_domain = "_dmarc." + cleaned
         print(f"Sending TXT DNS query for {dmarc_domain} via {self.dns_server}")
@@ -57,6 +58,11 @@ class MailFactor(ScoringFactor):
         for record in txt:
             if DMARC_MARKER in record.to_text():
                 print(f"DMARC rule discovered in {cleaned}")
-                return 0  # All domains with a valid SPF record should also have a valid DMARC
+                return (
+                    0,
+                    [],
+                )  # All domains with a valid SPF record should also have a valid DMARC
         print(f"DMARC rule discovered in {cleaned}")
-        return 1  # All domains with a valid SPF record should also have a valid DMARC
+        return 1, [
+            "DMARC rule missing"
+        ]  # All domains with a valid SPF record should also have a valid DMARC

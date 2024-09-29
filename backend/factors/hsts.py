@@ -12,8 +12,8 @@ class HSTSFactor(ScoringFactor):
                 print(
                     f"HSTS is enabled for {url}, header: {response.headers['Strict-Transport-Security']}"
                 )
-                return 0
-            return 1
+                return 0, []
+            return 1, ["HSTS (Strict Transport Security) missing"]
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")
-            return 1
+            return 1, ["Failed to get HSTS status"]

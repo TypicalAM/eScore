@@ -20,7 +20,7 @@ class AbuseIpDatabaseFactor(ScoringFactor):
         ]
         self.headers = {"Key": f"{self.api_key}", "Accept": "application/json"}
 
-    def score(self, url: str, content) -> int:
+    def score(self, url: str, content) -> list[int, list[str]]:
         cleaned = urlparse(url).netloc
         print(f"Sending A DNS query for {cleaned} via {self.dns_server}")
         a = self.resolver.resolve(cleaned, "A")
@@ -28,6 +28,10 @@ class AbuseIpDatabaseFactor(ScoringFactor):
             params = {"ipAddress": quote(str(record))}
             resp = requests.get(ABUSE_IP_DB_URL, params=params, headers=self.headers)
             abuse_score = resp.json()["data"]["abuseConfidenceScore"]
-            print(f"Abuse IP DB reported an abuse score for {str(record)} as {abuse_score}")
-            return int(abuse_score)
-        return 0
+            print(
+                f"Abuse IP DB reported an abuse score for {str(record)} as {abuse_score}"
+            )
+            if int(abuse_score) > 50:
+                return int(abuse_score), ["High IP abuse score"]
+            return int(abuse_score), []
+        return 0, ["IP abuse status not present"]

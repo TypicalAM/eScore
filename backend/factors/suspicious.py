@@ -13,7 +13,7 @@ class SuspiciousNameFactor(ScoringFactor):
         print(f"Suspicious name factor loaded: {filename} {col}")
         self.domains = pd.read_csv(filename)[col].tolist()
 
-    def score(self, url: str, content: str = "") -> int:
+    def score(self, url: str, content: str = "") -> list[int, list[str]]:
         try:
             cleaned = urlparse(url).netloc
             last_name = cleaned.split(".")[-2]  # bogus.exempel.com -> exempel
@@ -30,7 +30,8 @@ class SuspiciousNameFactor(ScoringFactor):
                     print(
                         f"Analyzed domain {cleaned} is overly similar to {domain} (ratio: {levenstein_ratio})"
                     )
-                    return 1
+                    return 1, [f"High name similarity between {cleaned} and {domain}"]
         except Exception as e:
             print(f"Error while checking suspicious name: {str(e)}")
-        return 0
+            return 1, ["Failed to check name similarity"]
+        return 0, []

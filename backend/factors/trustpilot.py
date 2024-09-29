@@ -14,7 +14,7 @@ TRUSTSCORE_PATTERN = re.compile(r"TrustScore (\d+(\.\d+)?) out of 5")
 
 
 class TrustpilotFactor(ScoringFactor):
-    def score(self, url: str, content = "") -> int:
+    def score(self, url: str, content="") -> list[int, list[str]]:
         try:
             cleaned = urlparse(url).netloc
             url = TRUSTPILOT_BASE_URL + "/review/" + cleaned
@@ -26,10 +26,9 @@ class TrustpilotFactor(ScoringFactor):
                 print(f"TrustScore found: {trust_score} out of 5")
             else:
                 print("TrustScore no match, this site should exist")
-                return -20
+                return 0, ["No TrustScore rating"]
             trust_score = trust_score[1] + trust_score[2]  # 4.5 -> 45
-            return int(trust_score)
+            return int(trust_score), []
         except Exception as e:
             print(f"Error while checking trustpilot: {str(e)}")
-        return 0
-
+            return 0, ["Failed to get TrustScore records"]
