@@ -7,6 +7,7 @@ import requests
 from flask import Flask, jsonify, request
 from flask_caching import Cache
 from flask_cors import CORS
+from flask import send_from_directory
 
 from aggregator import ScoreAggregator, URLException
 from factors import (
@@ -63,6 +64,17 @@ cache = Cache(app)
 def make_key():  # POST request caching
     user_data = request.get_json()
     return ",".join([f"{key}={value}" for key, value in user_data.items()])
+
+
+@app.route('/')
+def root():
+    return send_from_directory("../web", "index.html")
+
+@app.route("/<path:path>")
+def send_static(path):
+    print(path)
+    return send_from_directory("../web", path)
+
 
 
 @app.route("/check_url", methods=["POST"])
@@ -136,3 +148,5 @@ if __name__ == "__main__":
 
     reviews.add_factor(TrustpilotFactor(), -1)  # 0 (good) to 50
     app.run(debug=DEBUG, host=HOST, port=PORT)
+
+
