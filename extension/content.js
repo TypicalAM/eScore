@@ -41,7 +41,7 @@ async function fetchFromAPI() {
 	let rating = 'No rating available';
 	rating = await fetchFromAPI();
 
-	chrome.runtime.sendMessage({ action: 'updateStatus', text: `${rating.total_score}`, color: '#C6A0F6'});
+	chrome.runtime.sendMessage({ action: 'updateStatus', text: `${JSON.stringify(rating)}`, color: '#C6A0F6'});
 
 	chrome.runtime.sendMessage({ action: 'setBadge', text: `${rating.total_score}`, color: '#FF0000'});
 })();
