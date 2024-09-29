@@ -85,7 +85,13 @@ def check_url():
         return jsonify({"error": "No URL provided"}), HTTPStatus.BAD_REQUEST
 
     url = data["url"]
-    response = requests.get(url)
+    response = None
+    try:
+        response = requests.get(url)
+    except Exception as exc:
+        if DEBUG:
+            print(f"Error while fetching the URL: {str(exc)}")
+        return jsonify({"error": "Failed to fetch the URL"}), HTTPStatus.BAD_REQUEST
     count = len(response.history)
     count_score = 0
     if count > 5:

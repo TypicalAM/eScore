@@ -9,7 +9,7 @@
       
          function checkAddress() {
               const address = document.getElementById('input').value;
-              if (!address.match(/^(http|https):\/\/[^ "]+$/)) {
+              if (!address) {
                 alert('Please enter a valid URL');
                 return;
               }
