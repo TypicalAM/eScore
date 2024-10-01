@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
    <script>
-      API_URL = 'https://sscore.piaseczny.dev';
+      API_URL = 'https://escore.piaseczny.dev';
       
          function checkAddress() {
               let address = document.getElementById('input').value;
@@ -17,7 +17,7 @@
                 address = 'https://' + address;
               }
               document.getElementById('box').innerHTML = '<div class="dot-flashing"></div>';
-              fetch('https://sscore.piaseczny.dev/check_url', {
+              fetch('https://escore.piaseczny.dev/check_url', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

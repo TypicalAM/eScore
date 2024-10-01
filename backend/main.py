@@ -24,10 +24,10 @@ from factors import (
     WhoisChecker,
 )
 
-DEBUG = os.getenv("HACKYEAH2024_DEBUG", False) == "True"
-HOST = os.environ.get("HACKYEAH2024_HOST", "0.0.0.0")
-PORT = os.environ.get("HACKYEAH2024_PORT", 5000)
-ABUSE_IP_DB_API_KEY = os.environ["HACKYEAH2024_API_KEY"]
+DEBUG = os.getenv("ESCORE_DEBUG", False) == "True"
+HOST = os.environ.get("ESCORE_HOST", "0.0.0.0")
+PORT = os.environ.get("ESCORE_PORT", 5000)
+ABUSE_IP_DB_API_KEY = os.environ["ESCORE_API_KEY"]
 
 tech_standards = ScoreAggregator(debug=DEBUG)
 reviews = ScoreAggregator(debug=DEBUG)

@@ -1,4 +1,4 @@
-API_URL = 'https://sscore.piaseczny.dev';
+API_URL = 'https://escore.piaseczny.dev';
 
 async function fetchFromAPI() {
 	const tabURL = window.location.href;

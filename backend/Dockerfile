@@ -12,16 +12,16 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends build-essential \
 	&& rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
 	&& apt-get clean \
-	&& groupadd -g "${GID}" hackyeah \
-	&& useradd --create-home --no-log-init -u "${UID}" -g "${GID}" hackyeah \
-	&& chown -R hackyeah:hackyeah /app
+	&& groupadd -g "${GID}" escore \
+	&& useradd --create-home --no-log-init -u "${UID}" -g "${GID}" escore \
+	&& chown -R escore:escore /app
 
-USER hackyeah
+USER escore
 
 # Install the requirements
-COPY --chown=hackyeah:hackyeah requirements.txt .
-RUN python3 -m venv /home/hackyeah/venv
-RUN /home/hackyeah/venv/bin/pip install --no-cache-dir -r requirements.txt
+COPY --chown=escore:escore requirements.txt .
+RUN python3 -m venv /home/escore/venv
+RUN /home/escore/venv/bin/pip install --no-cache-dir -r requirements.txt
 
-COPY --chown=hackyeah:hackyeah . .
-CMD ["/home/hackyeah/venv/bin/python3", "main.py"]
+COPY --chown=escore:escore . .
+CMD ["/home/escore/venv/bin/python3", "main.py"]
